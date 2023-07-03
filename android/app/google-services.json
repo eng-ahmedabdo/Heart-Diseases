@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "939999592051",
+    "project_id": "heart-diseases-f273b",
+    "storage_bucket": "heart-diseases-f273b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:939999592051:android:d388de4ff69ba0e7aeb406",
+        "android_client_info": {
+          "package_name": "com.example.heart_diseases"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "939999592051-l7l3pkk7rmaflk9p7cqsn6o7gka1hjnt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3LSkunKKiE3FbqkUe7JnH3PY6bj8T_EQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "939999592051-l7l3pkk7rmaflk9p7cqsn6o7gka1hjnt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
