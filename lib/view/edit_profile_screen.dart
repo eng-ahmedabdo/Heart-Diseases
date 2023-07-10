@@ -6,11 +6,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:get/get.dart';
 import 'package:heart_diseases/constant/colors.dart';
 import 'package:heart_diseases/custom_widget/main_button.dart';
 import 'package:heart_diseases/view_model/profile_view_model.dart';
 import 'package:image_picker/image_picker.dart';
+import '../custom_widget/no_internet_widget.dart';
 import '../custom_widget/text_field_in_edit_profile.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -24,7 +26,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
 
-  List<File> _images = [];
+  File? pickedImage;
 
   final FirebaseStorage storage = FirebaseStorage.instance;
 
@@ -62,138 +64,162 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               },
             ),
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  alignment: Alignment.topCenter,
+          body: OfflineBuilder(
+            connectivityBuilder: (
+                BuildContext context,
+                ConnectivityResult connectivity,
+                Widget child,
+                ) {
+              final bool connected = connectivity != ConnectivityResult.none;
+              if (connected) {
+                return SingleChildScrollView(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: 30,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          selectImage();
-                        },
-                        child: Stack(
-                          children: [
-                            if (_images.length != 1)
-                              ClipOval(
-                                child: Image.asset(
-                                  'assets/unpicked_image.jpg',
-                                  height: 150,
-                                  width: 150,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            if (_images.length == 1)
-                              ClipOval(
-                                child: Image.file(
-                                  _images[0],
-                                  height: 150,
-                                  width: 150,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            Positioned(
-                              bottom: 5.0,
-                              right: 2.0,
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  color: tOnBoardingColor2,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.camera_alt_outlined,
-                                  color: mainColor,
-                                  size: 30,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
+                      Container(
+                        alignment: Alignment.topCenter,
                         child: Column(
                           children: [
-                            TextFieldInEditProfile(
-                              text: 'Name',
-                              controller: _nameController,
-                            ),
                             SizedBox(
-                              height: 20,
+                              height: 30,
                             ),
-                            TextFieldInEditProfile(
-                              text: 'Email',
-                              controller: _emailController,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            SizedBox(
-                              height: 50,
-                            ),
-                            MainButton(
-                              text: "Update",
-                              onTap: () async {
-                                Future<List<String>> _uploadImages(
-                                    List<File> _selectedImagePath) async {
-                                  List<String> _Images = [];
-                                  for (File imageFile in _selectedImagePath) {
-                                    final Reference storageReference =
-                                        FirebaseStorage.instance
-                                            .ref()
-                                            .child('images')
-                                            .child(
-                                                'images/${controller.userModel!.userId}.jpg');
-                                    final UploadTask uploadTask =
-                                        storageReference.putFile(imageFile);
-                                    final TaskSnapshot downloadUrl =
-                                        (await uploadTask.whenComplete(() {}));
-                                    final String url = (await downloadUrl.ref
-                                        .getDownloadURL());
-                                    _Images.add(url);
-                                  }
-                                  return _Images;
-                                }
-
-                                List<String> imageUrls =
-                                    await _uploadImages(_images);
-                                await FirebaseFirestore.instance
-                                    .collection('Users')
-                                    .doc(controller.userModel!.userId)
-                                    .update({
-                                  'name': _nameController.text,
-                                  'email': _emailController.text,
-                                  'pic': "${imageUrls[0]}",
-                                }).then((value) async {
-                                  await controller.updateUser(
-                                      controller.userModel!.copyWith(
-                                    name: _nameController.text,
-                                    email: _emailController.text,
-                                    pic: imageUrls,
-                                  ));
-                                  await controller.getCurrentUser();
-                                });
-                                User? user = FirebaseAuth.instance.currentUser;
-                                await user!.updateEmail(_emailController.text);
+                            GestureDetector(
+                              onTap: () {
+                                selectImage();
                               },
+                              child: Stack(
+                                children: [
+                                  if (controller.userModel!.pic != null &&
+                                      controller.userModel!.pic!.isNotEmpty) ...[
+                                    ClipOval(
+                                      child: Image.network(
+                                        controller.userModel!.pic!,
+                                        height: 150,
+                                        width: 150,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ] else ...[
+                                    ClipOval(
+                                      child: Image.asset(
+                                        'assets/unpicked_image.jpg',
+                                        height: 150,
+                                        width: 150,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ],
+                                  if (pickedImage != null) ...[
+                                    ClipOval(
+                                      child: Image.file(
+                                        pickedImage!,
+                                        height: 150,
+                                        width: 150,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ],
+                                  Positioned(
+                                    bottom: 5.0,
+                                    right: 2.0,
+                                    child: Container(
+                                      height: 40,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                        color: tOnBoardingColor2,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(
+                                        Icons.camera_alt_outlined,
+                                        color: mainColor,
+                                        size: 30,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                children: [
+                                  TextFieldInEditProfile(
+                                    text: 'Name',
+                                    controller: _nameController,
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  TextFieldInEditProfile(
+                                    text: 'Email',
+                                    controller: _emailController,
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                  MainButton(
+                                    text: "Update",
+                                    onTap: () async {
+                                      if (pickedImage != null) {
+                                        final url = await _uploadImage(
+                                          controller.userModel!.userId!,
+                                          pickedImage!,
+                                        );
+                                        await _updateData(
+                                          userId: controller.userModel!.userId!,
+                                          imagePath: url,
+                                        );
+
+                                        await controller.updateUser(
+                                            controller.userModel!.copyWith(
+                                              name: _nameController.text,
+                                              email: _emailController.text,
+                                              pic: url,
+                                            ));
+                                      } else {
+                                        await _updateData(
+                                          userId: controller.userModel!.userId!,
+                                        );
+                                        if (_nameController.text !=
+                                            controller.userModel!.email) {
+                                          User? user =
+                                              FirebaseAuth.instance.currentUser;
+                                          await user!
+                                              .updateEmail(_emailController.text);
+                                        }
+                                        await controller.updateUser(
+                                            controller.userModel!.copyWith(
+                                              name: _nameController.text,
+                                              email: _emailController.text,
+                                              pic: null,
+                                            ));
+                                      }
+                                      await controller.getCurrentUser();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
-                ),
-              ],
+                );
+              } else {
+                return noInternetWidget();
+              }
+            },
+            child: Center(
+              child: CircularProgressIndicator(
+                color: mainColor,
+              ),
             ),
           ),
         );
@@ -201,7 +227,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Future selectImage() {
+  Future<String> _uploadImage(String id, File file) async {
+    final Reference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('images')
+        .child('images/${id}.jpg');
+    final UploadTask uploadTask = storageReference.putFile(file);
+    final TaskSnapshot downloadUrl = (await uploadTask.whenComplete(() {}));
+    final String url = (await downloadUrl.ref.getDownloadURL());
+    return url;
+  }
+
+  Future<void> _updateData({
+    required String userId,
+    String? imagePath,
+  }) async {
+    return await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .update({
+      'name': _nameController.text,
+      'email': _emailController.text,
+      if (imagePath != null) 'pic': imagePath,
+    });
+  }
+
+  Future<void> selectImage() async {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -223,8 +274,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         GestureDetector(
-                          onTap: () {
-                            selectImageFromGallery();
+                          onTap: () async {
+                            final image = await selectImageFromGallery();
+                            setState(() {
+                              pickedImage = image;
+                            });
+                            print(pickedImage);
+                            Navigator.of(context).pop();
                           },
                           child: Card(
                               elevation: 5,
@@ -243,8 +299,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               )),
                         ),
                         GestureDetector(
-                          onTap: () {
-                            selectImageFromCamera();
+                          onTap: () async {
+                            final image = await selectImageFromCamera();
+                            setState(() {
+                              pickedImage = image;
+                            });
+                            Navigator.of(context).pop();
                           },
                           child: Card(
                             elevation: 5,
@@ -273,29 +333,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         });
   }
 
-  selectImageFromGallery() async {
-    final XFile? file = await ImagePicker()
+  Future<File?> selectImageFromGallery() async {
+    final image = await ImagePicker()
         .pickImage(source: ImageSource.gallery, imageQuality: 10);
-    if (file != null) {
-      setState(() {
-        _images.add(File(file.path));
-        Navigator.pop(context);
-      });
+    if (image != null) {
+      return File(image.path);
     } else {
-      return 'Image Not Selected';
+      return null;
     }
   }
 
-  selectImageFromCamera() async {
-    final XFile? file = await ImagePicker()
+  Future<File?> selectImageFromCamera() async {
+    final image = await ImagePicker()
         .pickImage(source: ImageSource.camera, imageQuality: 10);
-    if (file != null) {
-      setState(() {
-        _images.add(File(file.path));
-        Navigator.pop(context);
-      });
+    if (image != null) {
+      return File(image.path);
     } else {
-      return 'Image Not Selected';
+      return null;
     }
   }
 }

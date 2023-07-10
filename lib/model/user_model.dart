@@ -14,7 +14,7 @@ class UserModel {
     );
   }
 
-  UserModel copyWith({String? userId, name,email,pic}) {
+  UserModel copyWith({String? userId, String? name,String? email, String? pic}) {
     return UserModel(
       userId: userId ?? this.userId,
       name: name ?? this.name,

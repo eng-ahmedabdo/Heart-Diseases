@@ -26,12 +26,11 @@ class ListTileInProfileScreen extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: grayColor),
+                    border: Border.all(color: Get.isDarkMode ? mainColor : grayColor),
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
-                        color: grayColor.withOpacity(0.2),
-                        spreadRadius: 2,
+                        color: Get.isDarkMode ? darkModeColor : grayColor.withOpacity(0.2),
                         blurRadius: 2,
                         offset: Offset(0, 2), // changes position of shadow
                       ),

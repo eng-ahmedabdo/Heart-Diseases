@@ -34,12 +34,12 @@ class TextFieldInEditProfile extends StatelessWidget {
           cursorColor: mainColor,
           decoration: InputDecoration(
             filled: true,
-            fillColor: Get.isDarkMode ? lightBlackColor : smoothPinkColor,
+            fillColor: Get.isDarkMode ? darkModeColor : smoothPinkColor,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(15),
               ),
-              borderSide: Get.isDarkMode ? BorderSide(color: whiteColor) : BorderSide(
+              borderSide: Get.isDarkMode ? BorderSide(color: mainColor) : BorderSide(
                 color: smoothPinkColor,
               ),
             ),
@@ -47,7 +47,7 @@ class TextFieldInEditProfile extends StatelessWidget {
               borderRadius: BorderRadius.all(
                 Radius.circular(15),
               ),
-              borderSide:Get.isDarkMode ? BorderSide(color: whiteColor) : BorderSide(
+              borderSide:Get.isDarkMode ? BorderSide(color: mainColor) : BorderSide(
                 color: smoothPinkColor,
               ),
             ),

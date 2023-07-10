@@ -6,18 +6,42 @@ import 'package:get_storage/get_storage.dart';
 import 'package:heart_diseases/constant/colors.dart';
 
 class MyThemes {
-  final lightTheme = ThemeData(
+  final lightTheme = ThemeData.light().copyWith(
     primaryColor: mainColor,
     backgroundColor: whiteColor,
-    brightness: Brightness.light,
+    colorScheme: ColorScheme(
+      primary: mainColor,
+      onPrimary: mainColor,
+      secondary: mainColor,
+      onSecondary: mainColor,
+      error: Colors.red,
+      onError: Colors.red,
+      background: whiteColor,
+      onBackground: whiteColor,
+      surface: whiteColor,
+      onSurface: whiteColor,
+      brightness: Brightness.light,
+    ),
     appBarTheme: const AppBarTheme(),
     dividerColor: Colors.black12,
   );
 
-  final darkTheme = ThemeData(
+  final darkTheme = ThemeData.dark().copyWith(
     primaryColor: darkModeColor,
     backgroundColor: darkModeColor,
-    brightness: Brightness.dark,
+    colorScheme: ColorScheme(
+      primary: darkModeColor,
+      onPrimary: darkModeColor,
+      secondary: darkModeColor,
+      onSecondary: darkModeColor,
+      error: Colors.red,
+      onError: Colors.red,
+      background: darkModeColor,
+      onBackground: darkModeColor,
+      surface: darkModeColor,
+      onSurface: darkModeColor,
+      brightness: Brightness.dark,
+    ),
     appBarTheme: const AppBarTheme(),
     dividerColor: Colors.white54,
   );

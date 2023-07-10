@@ -2,6 +2,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:heart_diseases/constant/colors.dart';
 
 class BreakFastMeal3 extends StatelessWidget {
   String txt = '';
@@ -10,7 +12,7 @@ class BreakFastMeal3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xffF5F5F5),
+        backgroundColor: Get.isDarkMode ? darkModeColor : Color(0xffF5F5F5),
         body: Column(
           children: [
             Container(
@@ -27,7 +29,7 @@ class BreakFastMeal3 extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 35, left: 20),
                 child: Stack(
                   alignment: Alignment.topLeft,
-                  children: <Widget>[
+                  children: [
                     Opacity(
                       opacity: 0.5,
                       child: CircleAvatar(
@@ -37,7 +39,9 @@ class BreakFastMeal3 extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 8),
                           child: IconButton(
                             icon: Icon(Icons.arrow_back_ios),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
                           ),
                         ),
                       ),
@@ -72,7 +76,7 @@ class BreakFastMeal3 extends StatelessWidget {
                   'Ingredients',
                   style: TextStyle(
                       fontSize: 24,
-                      color: Colors.black,
+                      color: Get.isDarkMode ? whiteColor : Colors.black,
                       fontFamily: "IBM Plex Sans",
                       fontWeight: FontWeight.w600
                       // fontWeight: FontWeight.w500,
@@ -86,19 +90,19 @@ class BreakFastMeal3 extends StatelessWidget {
             ),
             Ingredients('2 black toast'),
             SizedBox(
-              height: 15,
+              height: 10,
             ),
             Ingredients('Cottage cheese with olive oil'),
             SizedBox(
-              height: 15,
+              height: 10,
             ),
             Ingredients('An Apple'),
             SizedBox(
-              height: 15,
+              height: 10,
             ),
             Ingredients('Lettuce and arugula'),
             SizedBox(
-              height: 25,
+              height: 15
             ),
             Container(
               height: 2,
@@ -106,7 +110,7 @@ class BreakFastMeal3 extends StatelessWidget {
               color: Color(0xffDBDBDB),
             ),
             SizedBox(
-              height: 25,
+              height: 15,
             ),
             Row(
               children: [
@@ -121,29 +125,21 @@ class BreakFastMeal3 extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text(
-                  'A cup of green tea an hour after \nthe meal',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0.60,
-                    fontSize: 20,
-                    color: Colors.black,
+                Container(
+                  width: 300,
+                  child: Text(
+                    'A cup of green tea an hour after \nthe meal',
+                    maxLines: 2,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0.60,
+                      height: 1.5,
+                      fontSize: 18,
+                      color: Get.isDarkMode ? whiteColor : Colors.black,
+                    ),
                   ),
                 ),
               ],
-            ),
-            SizedBox(
-              height: 45,
-            ),
-            Center(
-              child: Container(
-                width: 134,
-                height: 5,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: Color(0xff232b43),
-                ),
-              ),
             ),
           ],
         ),
@@ -162,7 +158,7 @@ Widget Ingredients(String txt) {
         Icon(
           Icons.circle,
           size: 7,
-          color: Colors.black,
+          color: Get.isDarkMode ? whiteColor : Colors.black,
         ),
         SizedBox(
           width: 5,
@@ -170,7 +166,7 @@ Widget Ingredients(String txt) {
         Text(
           txt,
           style: TextStyle(
-            color: Colors.black,
+            color: Get.isDarkMode ? whiteColor : Colors.black,
             fontSize: 18,
             fontFamily: "IBM Plex Sans",
           ),

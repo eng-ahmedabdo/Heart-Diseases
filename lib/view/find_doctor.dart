@@ -1,12 +1,14 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:get/get.dart';
 import 'package:heart_diseases/custom_widget/doctor_item.dart';
 import 'package:heart_diseases/helper/doctor_data.dart';
 import 'package:heart_diseases/model/doctor_model.dart';
 
 import '../constant/colors.dart';
+import '../custom_widget/no_internet_widget.dart';
 
 class FindDoctor extends StatefulWidget {
   @override
@@ -53,19 +55,37 @@ class _FindDoctorState extends State<FindDoctor> {
           },
         ),
       ),
-      body: Container(
-        child: ListView.builder(
-          itemCount: doctors.length,
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
-          itemBuilder: (context, index) {
-            return DoctorItem(
-              name: doctors[index].name,
-              imageUrl: doctors[index].imageUrl,
-              address: doctors[index].address,
-              specialize: doctors[index].Specialization,
+      body: OfflineBuilder(
+        connectivityBuilder: (
+            BuildContext context,
+            ConnectivityResult connectivity,
+            Widget child,
+            ) {
+          final bool connected = connectivity != ConnectivityResult.none;
+          if (connected) {
+            return Container(
+              child: ListView.builder(
+                itemCount: doctors.length,
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return DoctorItem(
+                    name: doctors[index].name,
+                    imageUrl: doctors[index].imageUrl,
+                    address: doctors[index].address,
+                    specialize: doctors[index].Specialization,
+                  );
+                },
+              ),
             );
-          },
+          } else {
+            return noInternetWidget();
+          }
+        },
+        child: Center(
+          child: CircularProgressIndicator(
+            color: mainColor,
+          ),
         ),
       ),
     );

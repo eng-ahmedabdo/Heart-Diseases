@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:get/get.dart';
 import 'package:heart_diseases/helper/ai_model.dart';
 import 'package:heart_diseases/view/have_no_risk.dart';
@@ -10,6 +11,7 @@ import 'package:heart_diseases/view/have_no_risk.dart';
 import '../constant/colors.dart';
 import '../custom_widget/labelTextInTakeTest.dart';
 import '../custom_widget/main_button.dart';
+import '../custom_widget/no_internet_widget.dart';
 import '../custom_widget/textfield_takeatest.dart';
 import 'have_risk.dart';
 
@@ -45,127 +47,145 @@ class TakeAtest4Screen extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(bottom: 20),
+      body: OfflineBuilder(
+        connectivityBuilder: (
+            BuildContext context,
+            ConnectivityResult connectivity,
+            Widget child,
+            ) {
+          final bool connected = connectivity != ConnectivityResult.none;
+          if (connected) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    LabelTextInTakeTest(
-                      text: 'Systolic blood pressure',
+                    Container(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: Column(
+                        children: [
+                          LabelTextInTakeTest(
+                            text: 'Systolic blood pressure',
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextFieldTakeATest(
+                            controller: _systolicBloodPressureController,
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(
-                      height: 15,
+                    Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 20),
+                      child: Column(
+                        children: [
+                          LabelTextInTakeTest(
+                            text: 'Diastolic blood pressure',
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextFieldTakeATest(
+                            controller: _diastolicBloodPressureController,
+                          ),
+                        ],
+                      ),
                     ),
-                    TextFieldTakeATest(
-                      controller: _systolicBloodPressureController,
+                    Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 20),
+                      child: Column(
+                        children: [
+                          LabelTextInTakeTest(
+                            text: 'Heart Rate',
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextFieldTakeATest(),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 10, bottom: 20),
-                child: Column(
-                  children: [
-                    LabelTextInTakeTest(
-                      text: 'Diastolic blood pressure',
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFieldTakeATest(
-                      controller: _diastolicBloodPressureController,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 10, bottom: 20),
-                child: Column(
-                  children: [
-                    LabelTextInTakeTest(
-                      text: 'Heart Rate',
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFieldTakeATest(),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 10, bottom: 20),
-                child: Column(
-                  children: [
-                    LabelTextInTakeTest(
-                      text: 'Glucose Level',
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFieldTakeATest(
-                      controller: _glucoseController,
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    StatefulBuilder(builder: (context, setState) {
-                      return MainButton(
-                        text: isLoading ? "Calculating" : "Result of test",
-                        onTap: () async {
-                          model = model.copyWith(
-                            systolicBloodPressure: double.tryParse(
-                                _systolicBloodPressureController.text),
-                            diastolicBloodPressure: double.tryParse(
-                                _diastolicBloodPressureController.text),
-                            glucose: double.tryParse(_glucoseController.text),
-                          );
+                    Container(
+                      padding: EdgeInsets.only(top: 10, bottom: 20),
+                      child: Column(
+                        children: [
+                          LabelTextInTakeTest(
+                            text: 'Glucose Level',
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          TextFieldTakeATest(
+                            controller: _glucoseController,
+                          ),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          StatefulBuilder(builder: (context, setState) {
+                            return MainButton(
+                              text: isLoading ? "Calculating..." : "Result of test",
+                              onTap: () async {
+                                model = model.copyWith(
+                                  systolicBloodPressure: double.tryParse(
+                                      _systolicBloodPressureController.text),
+                                  diastolicBloodPressure: double.tryParse(
+                                      _diastolicBloodPressureController.text),
+                                  glucose: double.tryParse(_glucoseController.text),
+                                );
 
-                          if (model.systolicBloodPressure == null ||
-                              model.diastolicBloodPressure == null ||
-                              model.glucose == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('That information are required'),
-                              ),
+                                if (model.systolicBloodPressure == null ||
+                                    model.diastolicBloodPressure == null ||
+                                    model.glucose == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('That information are required'),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                setState(() => isLoading = true);
+                                final test = await model.test();
+                                setState(() => isLoading = false);
+
+                                if (test != null) {
+                                  final data = jsonDecode(test);
+                                  final result = data["predict_disease"][0];
+                                  if (result == 0) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            HaveNoRiskScreen(),
+                                      ),
+                                    );
+                                  }  else{
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            HaveRiskScreen(),
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
                             );
-                            return;
-                          }
-                          setState(() => isLoading = true);
-                          final test = await model.test();
-                          setState(() => isLoading = false);
-
-                          if (test != null) {
-                            final data = jsonDecode(test);
-                            final result = data["predict_disease"][0];
-                            if (result == 0) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      HaveNoRiskScreen(),
-                                ),
-                              );
-                            }  else{
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      HaveRiskScreen(),
-                                ),
-                              );
-                            }
-                          }
-                        },
-                      );
-                    }),
+                          }),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
+            );
+          } else {
+            return noInternetWidget();
+          }
+        },
+        child: Center(
+          child: CircularProgressIndicator(
+            color: mainColor,
           ),
         ),
       ),

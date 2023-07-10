@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heart_diseases/constant/colors.dart';
 
 import '../../model/onboarding_model.dart';
 
@@ -34,6 +35,7 @@ class buildOnboardingItem extends StatelessWidget {
             model.title,
             textAlign: TextAlign.center,
             style: TextStyle(
+              color: blackColor,
               fontSize: 23,
               fontWeight: FontWeight.w500,
             ),

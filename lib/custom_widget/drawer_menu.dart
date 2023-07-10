@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heart_diseases/constant/colors.dart';
-import 'package:heart_diseases/theme/app_theme.dart';
 import 'package:heart_diseases/view/healthylifestyletips_screen.dart';
 
 import '../view/find_doctor.dart';
@@ -18,44 +17,60 @@ Widget drawerMenu(BuildContext context) {
         return Center(child: CircularProgressIndicator());
       }
       return Drawer(
-        backgroundColor: Get.isDarkMode ? blackColor : whiteColor,
+        backgroundColor: context.theme.colorScheme.background,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView(
             children: [
-              DrawerHeader(
-                child: ListView(
+              Container(
+                alignment: Alignment.topCenter,
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      alignment: Alignment.topCenter,
-                      padding: EdgeInsets.all(20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            "assets/my_account_photo.png",
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              controller.userModel!.name!,
-                              style: TextStyle(
-                                color: Get.isDarkMode ? whiteColor : darkModeColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            controller.userModel!.email!,
-                            style: TextStyle(color: Get.isDarkMode ? whiteColor : darkModeColor),
-                          )
-                        ],
+                    if (controller.userModel!.pic != null &&
+                        controller.userModel!.pic!.isNotEmpty) ...[
+                      ClipOval(
+                        child: Image.network(
+                          controller.userModel!.pic!,
+                          height: 120,
+                          width: 120,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ] else ...[
+                      ClipOval(
+                        child: Image.asset(
+                          'assets/unpicked_image.jpg',
+                          height: 120,
+                          width: 120,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        controller.userModel!.name!,
+                        style: TextStyle(
+                          color:
+                          Get.isDarkMode ? whiteColor : darkModeColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
+                    Text(
+                      controller.userModel!.email!,
+                      style: TextStyle(
+                          color: Get.isDarkMode
+                              ? whiteColor
+                              : darkModeColor),
+                    )
                   ],
                 ),
               ),
+              Divider(),
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -66,53 +81,6 @@ Widget drawerMenu(BuildContext context) {
                 child: ListTileInProfileScreen(
                   my_text: 'My account',
                   my_image: 'assets/myAccount_icon.png',
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: grayColor),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: grayColor.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 2,
-                        offset: Offset(0, 2), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(
-                          Icons.dark_mode,
-                          size: 30,
-                          color: smoothPinkColor,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Text(
-                            "Dark Mode",
-                            style: TextStyle(
-                              color: Get.isDarkMode ? whiteColor : darkModeColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            MyThemes().changeTheme();
-                          },
-                          icon: Icon(Icons.brightness_4_outlined , color: mainColor,),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ),
               InkWell(

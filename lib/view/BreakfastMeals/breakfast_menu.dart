@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:heart_diseases/view/BreakfastMeals/breakfast_meal1.dart';
+import 'package:heart_diseases/view/BreakfastMeals/breakfast_meal2.dart';
+import 'package:heart_diseases/view/BreakfastMeals/breakfast_meal3.dart';
+import 'package:heart_diseases/view/BreakfastMeals/breakfast_meal4.dart';
 import 'package:heart_diseases/view/DinnerMeals/dinner_menu.dart';
+import 'package:heart_diseases/view/LunchMeals/lunch_meal2.dart';
+import 'package:heart_diseases/view/LunchMeals/lunch_meal3.dart';
+import 'package:heart_diseases/view/LunchMeals/lunch_meal4.dart';
+import 'package:heart_diseases/view/healthylifestyletips_screen.dart';
 
 import '../../constant/colors.dart';
 import '../LunchMeals/lunch_menu.dart';
@@ -21,12 +29,19 @@ class BreakfastMenu extends StatelessWidget {
               children: [
                 Container(
                   child: IconButton(
-                    icon: Icon(Icons.menu),
-                    onPressed: () {},
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HealthyLifeStyleTipsScreen(),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 30,
                 ),
                 Container(
                   child: Text(
@@ -133,75 +148,86 @@ class BreakfastMenu extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 120,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                    image: AssetImage('assets/breakfastMeal1.png'),
-                                    fit: BoxFit.cover,
+                          InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => BreakFastMeal1()),);
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 120,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                    image: const DecorationImage(
+                                      image:
+                                          AssetImage('assets/breakfastMeal1.png'),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Oats with yogurt',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                '5 Min',
-                                style: TextStyle(
-                                    fontSize: 15, color: Color(0xffC4C4C4)),
-                              )
-                            ],
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'Oats with yogurt',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 16),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  '5 Min',
+                                  style: TextStyle(
+                                      fontSize: 15, color: Color(0xffC4C4C4)),
+                                )
+                              ],
+                            ),
                           ),
                           SizedBox(
                             width: 30,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 120,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                    image:
-                                        AssetImage('assets/breakfastMeal2.png'),
-                                    fit: BoxFit.cover,
+                          InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => BreakFastMeal2()),);
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 120,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                    image: const DecorationImage(
+                                      image:
+                                          AssetImage('assets/breakfastMeal2.png'),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Eggs with vegetables',
-                                style: TextStyle(
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'Eggs with vegetables',
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
-                                    ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                '5 Min',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xffC4C4C4),
-                                    letterSpacing: 0.60),
-                              )
-                            ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  '5 Min',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color(0xffC4C4C4),
+                                      letterSpacing: 0.60),
+                                )
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -210,86 +236,96 @@ class BreakfastMenu extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 120,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                    image:
-                                        AssetImage('assets/breakfastMeal3.png'),
-                                    fit: BoxFit.cover,
+                          InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => BreakFastMeal3()),);
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 120,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                    image: const DecorationImage(
+                                      image:
+                                          AssetImage('assets/breakfastMeal3.png'),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Toast with cheese',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    letterSpacing: 0.72),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                '5 Min',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Color(0xffC4C4C4),
-                                  fontFamily: "IBM Plex Sans",
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: 0.60,
+                                SizedBox(
+                                  height: 10,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  'Toast with cheese',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      letterSpacing: 0.72),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  '5 Min',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Color(0xffC4C4C4),
+                                    fontFamily: "IBM Plex Sans",
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: 0.60,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                           SizedBox(
                             width: 30,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 120,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                    image:
-                                    AssetImage('assets/breakfastMeal4.png'),
-                                    fit: BoxFit.cover,
+                          InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => BreakFastMeal4()),);
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 120,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                    image: const DecorationImage(
+                                      image:
+                                          AssetImage('assets/breakfastMeal4.png'),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Omelet eggs',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    letterSpacing: 0.72),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                '5 Min',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Color(0xffC4C4C4),
-                                  fontFamily: "IBM Plex Sans",
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: 0.60,
+                                SizedBox(
+                                  height: 10,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  'Omelet eggs',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      letterSpacing: 0.72),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  '5 Min',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Color(0xffC4C4C4),
+                                    fontFamily: "IBM Plex Sans",
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: 0.60,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                           // Column(
                           //   crossAxisAlignment: CrossAxisAlignment.start,

@@ -6,6 +6,8 @@ import 'package:heart_diseases/model/user_model.dart';
 import 'package:heart_diseases/view/registration/login_page.dart';
 
 class ProfileViewModel extends GetxController{
+
+  var isLoading = false.obs;
   @override
   void onInit() async {
     super.onInit();
@@ -27,10 +29,12 @@ class ProfileViewModel extends GetxController{
   }
 
   Future<void> signOut() async{
+    isLoading.value = true;
     await GoogleSignIn().signOut();
     await FirebaseAuth.instance.signOut();
     localStorageData.deleteUser();
     Get.offAll(LoginPage());
+    isLoading.value = false;
   }
 
 }

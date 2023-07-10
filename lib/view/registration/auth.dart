@@ -13,7 +13,8 @@ import 'package:heart_diseases/view/registration/login_page.dart';
 
 class AuthViewModel extends GetxController {
   var isPasswordHidden = true.obs;
-  var isChecked = false.obs;
+  var isChecked = true.obs;
+  var isLoading = false.obs;
 
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -62,6 +63,7 @@ class AuthViewModel extends GetxController {
   }
 
   void signInWithEmailAndPassword() async {
+    isLoading.value = true;
     try {
       final userData = await _auth.signInWithEmailAndPassword(
           email: email!, password: password!);
@@ -83,10 +85,13 @@ class AuthViewModel extends GetxController {
         colorText: Colors.black,
         snackPosition: SnackPosition.BOTTOM,
       );
+
+      isLoading.value = false;
     }
   }
 
   void createAccountWithEmailAndPassword() async {
+    isLoading.value = true;
     try {
       await _auth
           .createUserWithEmailAndPassword(
@@ -107,6 +112,8 @@ class AuthViewModel extends GetxController {
         colorText: Colors.black,
         snackPosition: SnackPosition.BOTTOM,
       );
+
+      isLoading.value = false;
     }
   }
 
@@ -140,4 +147,5 @@ class AuthViewModel extends GetxController {
   Future<bool> setUser(UserModel userModel) async {
     return await localStorageData.setUser(userModel);
   }
+
 }
