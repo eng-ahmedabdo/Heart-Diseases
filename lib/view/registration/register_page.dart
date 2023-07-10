@@ -27,15 +27,13 @@ class RegisterPage extends GetWidget<AuthViewModel> {
               width: double.infinity,
               height: double.infinity,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 150),
-                    child: Container(
-                      height: size.height * 0.3,
-                      width: size.width * 0.6,
-                      child: Image(
-                        image: AssetImage('assets/splash.png'),
-                      ),
+                  Container(
+                    height: size.height * 0.3,
+                    width: size.width * 0.6,
+                    child: Image(
+                      image: Get.isDarkMode ? AssetImage('assets/lodo_dark.png') :AssetImage('assets/splash.png'),
                     ),
                   ),
                   SizedBox(

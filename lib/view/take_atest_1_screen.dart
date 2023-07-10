@@ -18,6 +18,9 @@ class TakeATest1Screen extends StatelessWidget {
   final _cigarettesController = TextEditingController();
   AIModel aiModel = AIModel();
 
+  int isSmoking = 1;
+  int isHighBloodP = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,10 +40,10 @@ class TakeATest1Screen extends StatelessWidget {
       ),
       body: OfflineBuilder(
         connectivityBuilder: (
-            BuildContext context,
-            ConnectivityResult connectivity,
-            Widget child,
-            ) {
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
           final bool connected = connectivity != ConnectivityResult.none;
           if (connected) {
             return SingleChildScrollView(
@@ -51,7 +54,8 @@ class TakeATest1Screen extends StatelessWidget {
                     children: [
                       Container(
                         alignment: Alignment.topLeft,
-                        padding: EdgeInsets.only(left: 15, right: 10, bottom: 10),
+                        padding:
+                            EdgeInsets.only(left: 15, right: 10, bottom: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -81,6 +85,7 @@ class TakeATest1Screen extends StatelessWidget {
                       TestWithYesOrNo(
                         text: 'Do you smoke?',
                         onChanged: (value) {
+                          isSmoking = value;
                           aiModel = aiModel.copyWith(
                             isSmoking: value,
                           );
@@ -90,12 +95,14 @@ class TakeATest1Screen extends StatelessWidget {
                         height: 15,
                       ),
                       Container(
-                        padding: EdgeInsets.only(left: 15, right: 10, bottom: 10),
+                        padding:
+                            EdgeInsets.only(left: 15, right: 10, bottom: 10),
                         child: Column(
                           children: [
                             Text(
                               "The average number of cigarettes you smoke in a day.",
-                              style: TextStyle(color: lightBlackColor, fontSize: 18),
+                              style: TextStyle(
+                                  color: lightBlackColor, fontSize: 18),
                             ),
                             SizedBox(
                               height: 10,
@@ -112,7 +119,10 @@ class TakeATest1Screen extends StatelessWidget {
                       TestWithYesOrNo(
                         text: 'Are you taking blood pressure medication?',
                         onChanged: (value) {
-                          aiModel = aiModel.copyWith(isHighBloodPressure: value);
+                          isHighBloodP = value;
+                          aiModel = aiModel.copyWith(
+                            isHighBloodPressure: value,
+                          );
                         },
                       ),
                       Padding(
@@ -122,19 +132,25 @@ class TakeATest1Screen extends StatelessWidget {
                             onTap: () {
                               aiModel = aiModel.copyWith(
                                 cigarettes: int.tryParse(
-                                  _cigarettesController.text,
-                                ),
+                                      _cigarettesController.text,
+                                    ) ??
+                                    0,
+                                isSmoking: isSmoking,
+                                isHighBloodPressure: isHighBloodP,
                               );
-                              if (aiModel.isSmoking == null ||
-                                  aiModel.cigarettes == null ||
-                                  aiModel.isHighBloodPressure == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('That information are required'),
-                                  ),
-                                );
-                                return;
+                              if (aiModel.isSmoking == 1) {
+                                if (aiModel.cigarettes == 0) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.grey,
+                                      content:
+                                          Text('No of cigarettes is required and cannot be 0'),
+                                    ),
+                                  );
+                                  return;
+                                }
                               }
+
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

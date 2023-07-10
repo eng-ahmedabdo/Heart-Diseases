@@ -80,7 +80,7 @@ class ForgetPasswordMailPage extends GetWidget<AuthViewModel> {
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide: BorderSide(
-                        color: Colors.grey.shade300,
+                        color: Get.isDarkMode ? mainColor : Colors.grey.shade300,
                       )
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -91,7 +91,7 @@ class ForgetPasswordMailPage extends GetWidget<AuthViewModel> {
                     ),
                     filled: true,
                     hintText: "name@example.com",
-                    fillColor: Colors.grey.shade100,
+                    fillColor: Get.isDarkMode ? darkModeColor : Colors.grey.shade100,
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: mainColor,
@@ -123,7 +123,7 @@ class ForgetPasswordMailPage extends GetWidget<AuthViewModel> {
                         'Reset Password',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Get.isDarkMode ? darkModeColor : whiteColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),

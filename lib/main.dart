@@ -11,6 +11,7 @@ import 'constant/colors.dart';
 import 'custom_widget/no_internet_widget.dart';
 
 void main() async {
+
   //This two lines to connect the app with firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

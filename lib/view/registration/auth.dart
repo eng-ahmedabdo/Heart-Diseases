@@ -27,7 +27,6 @@ class AuthViewModel extends GetxController {
 
   final LocalStorageData localStorageData = Get.find();
 
-
   @override
   void onInit() {
     super.onInit();
@@ -68,7 +67,7 @@ class AuthViewModel extends GetxController {
       final userData = await _auth.signInWithEmailAndPassword(
           email: email!, password: password!);
       final data = (await FireStoreUser().getCurrentUser(userData.user!.uid))
-          .data() as Map<dynamic , dynamic>;
+          .data() as Map<dynamic, dynamic>;
       await setUser(UserModel(
         userId: data['userId'],
         name: data['name'],
@@ -85,9 +84,8 @@ class AuthViewModel extends GetxController {
         colorText: Colors.black,
         snackPosition: SnackPosition.BOTTOM,
       );
-
-      isLoading.value = false;
     }
+    isLoading.value = false;
   }
 
   void createAccountWithEmailAndPassword() async {
@@ -112,9 +110,8 @@ class AuthViewModel extends GetxController {
         colorText: Colors.black,
         snackPosition: SnackPosition.BOTTOM,
       );
-
-      isLoading.value = false;
     }
+    isLoading.value = false;
   }
 
   void sendPasswordResetEmail(String email) async {
@@ -147,5 +144,4 @@ class AuthViewModel extends GetxController {
   Future<bool> setUser(UserModel userModel) async {
     return await localStorageData.setUser(userModel);
   }
-
 }

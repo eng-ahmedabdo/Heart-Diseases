@@ -227,16 +227,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Future<String> _uploadImage(String id, File file) async {
-    final Reference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('images')
-        .child('images/${id}.jpg');
-    final UploadTask uploadTask = storageReference.putFile(file);
-    final TaskSnapshot downloadUrl = (await uploadTask.whenComplete(() {}));
-    final String url = (await downloadUrl.ref.getDownloadURL());
-    return url;
-  }
+
 
   Future<void> _updateData({
     required String userId,
@@ -250,6 +241,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       'email': _emailController.text,
       if (imagePath != null) 'pic': imagePath,
     });
+  }
+
+  Future<String> _uploadImage(String id, File file) async {
+    final Reference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('images')
+        .child('images/${id}.jpg');
+    final UploadTask uploadTask = storageReference.putFile(file);
+    final TaskSnapshot downloadUrl = (await uploadTask.whenComplete(() {}));
+    final String url = (await downloadUrl.ref.getDownloadURL());
+    return url;
   }
 
   Future<void> selectImage() async {

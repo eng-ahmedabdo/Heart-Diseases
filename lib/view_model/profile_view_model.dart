@@ -29,12 +29,11 @@ class ProfileViewModel extends GetxController{
   }
 
   Future<void> signOut() async{
-    isLoading.value = true;
+
     await GoogleSignIn().signOut();
     await FirebaseAuth.instance.signOut();
     localStorageData.deleteUser();
-    Get.offAll(LoginPage());
-    isLoading.value = false;
+
   }
 
 }

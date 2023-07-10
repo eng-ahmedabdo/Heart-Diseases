@@ -9,7 +9,9 @@ import '../custom_widget/no_internet_widget.dart';
 import 'find_doctor.dart';
 
 class HaveRiskScreen extends StatelessWidget {
-  const HaveRiskScreen({super.key});
+  const HaveRiskScreen(this.risk,{super.key});
+
+  final String risk;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,7 @@ class HaveRiskScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "You have a risk of coronary heart disease CHD",
+                    "You have a risk of coronary heart disease CHD with Risk : $risk",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Get.isDarkMode ? whiteColor : darkModeColor,

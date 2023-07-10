@@ -24,7 +24,6 @@ class _BMIPageState extends State<BMIPage> {
   @override
   void initState() {
     model = widget.aiModel;
-    print(model.toJson());
     super.initState();
   }
 
@@ -44,7 +43,8 @@ class _BMIPageState extends State<BMIPage> {
           },
           icon: Icon(
             Icons.arrow_back_ios,
-            color: Get.isDarkMode ? whiteColor : darkModeColor,
+            color: Get.isDarkMode ? whiteColor
+                : darkModeColor,
           ),
         ),
         backgroundColor: Get.isDarkMode ? darkModeColor : whiteColor,

@@ -8,6 +8,7 @@ import 'package:heart_diseases/view/edit_profile_screen.dart';
 import 'package:heart_diseases/view/privacy_policy_screen.dart';
 import 'package:heart_diseases/view/profile_sceen.dart';
 import 'package:heart_diseases/view/registration/auth.dart';
+import 'package:heart_diseases/view/registration/login_page.dart';
 
 import '../custom_widget/list_tile_in_my_account_screen.dart';
 import '../custom_widget/no_internet_widget.dart';
@@ -148,8 +149,9 @@ class MyAccountScreen extends GetWidget<AuthViewModel> {
                                       ),
                                       Obx(
                                         () => InkWell(
-                                          onTap: () {
-                                            controller.signOut();
+                                          onTap: () async {
+                                            await controller.signOut();
+                                            Get.offAll(LoginPage());
                                           },
                                           child: controller.isLoading.value
                                               ? CircularProgressIndicator()

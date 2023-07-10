@@ -29,6 +29,7 @@ class TakeAtest4Screen extends StatelessWidget {
   final _systolicBloodPressureController = TextEditingController();
   final _diastolicBloodPressureController = TextEditingController();
   final _glucoseController = TextEditingController();
+  final _hdlCholesterol = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +50,10 @@ class TakeAtest4Screen extends StatelessWidget {
       ),
       body: OfflineBuilder(
         connectivityBuilder: (
-            BuildContext context,
-            ConnectivityResult connectivity,
-            Widget child,
-            ) {
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
           final bool connected = connectivity != ConnectivityResult.none;
           if (connected) {
             return Padding(
@@ -97,12 +98,14 @@ class TakeAtest4Screen extends StatelessWidget {
                       child: Column(
                         children: [
                           LabelTextInTakeTest(
-                            text: 'Heart Rate',
+                            text: 'Hdl Cholesterol',
                           ),
                           SizedBox(
                             height: 15,
                           ),
-                          TextFieldTakeATest(),
+                          TextFieldTakeATest(
+                            controller: _hdlCholesterol,
+                          ),
                         ],
                       ),
                     ),
@@ -124,22 +127,29 @@ class TakeAtest4Screen extends StatelessWidget {
                           ),
                           StatefulBuilder(builder: (context, setState) {
                             return MainButton(
-                              text: isLoading ? "Calculating..." : "Result of test",
+                              text: isLoading
+                                  ? "Calculating..."
+                                  : "Result of test",
                               onTap: () async {
                                 model = model.copyWith(
                                   systolicBloodPressure: double.tryParse(
                                       _systolicBloodPressureController.text),
                                   diastolicBloodPressure: double.tryParse(
                                       _diastolicBloodPressureController.text),
-                                  glucose: double.tryParse(_glucoseController.text),
+                                  glucose:
+                                      double.tryParse(_glucoseController.text),
+                                  hdlCholesterol:
+                                      double.tryParse(_hdlCholesterol.text),
                                 );
 
                                 if (model.systolicBloodPressure == null ||
                                     model.diastolicBloodPressure == null ||
-                                    model.glucose == null) {
+                                    model.glucose == null ||
+                                    model.hdlCholesterol == null) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('That information are required'),
+                                      content:
+                                          Text('That information are required'),
                                     ),
                                   );
                                   return;
@@ -151,24 +161,26 @@ class TakeAtest4Screen extends StatelessWidget {
                                 if (test != null) {
                                   final data = jsonDecode(test);
                                   final result = data["predict_disease"][0];
+                                  final risk = data['Risk'];
                                   if (result == 0) {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            HaveNoRiskScreen(),
+                                            HaveNoRiskScreen(risk),
                                       ),
                                     );
-                                  }  else{
+                                  } else {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            HaveRiskScreen(),
+                                        builder: (context) => HaveRiskScreen(risk),
                                       ),
                                     );
+                                    print(aiModel.toJson());
                                   }
                                 }
+                                print(model.toJson());
                               },
                             );
                           }),

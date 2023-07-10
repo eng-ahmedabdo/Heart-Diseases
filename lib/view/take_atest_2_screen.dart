@@ -19,6 +19,9 @@ class TakeATest2Screen extends StatelessWidget {
 
   AIModel model;
   final _cholesterolController = TextEditingController();
+  int isStroking = 1;
+  int isHighBloodP = 1;
+  int isDiabetes = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +42,10 @@ class TakeATest2Screen extends StatelessWidget {
       ),
       body: OfflineBuilder(
         connectivityBuilder: (
-            BuildContext context,
-            ConnectivityResult connectivity,
-            Widget child,
-            ) {
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
           final bool connected = connectivity != ConnectivityResult.none;
           if (connected) {
             return Container(
@@ -55,7 +58,9 @@ class TakeATest2Screen extends StatelessWidget {
                     ),
                     TestWithYesOrNo(
                       text: "Have you ever had a stroke or not?",
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        isStroking = value;
+                      },
                     ),
                     SizedBox(
                       height: 20,
@@ -63,7 +68,9 @@ class TakeATest2Screen extends StatelessWidget {
                     TestWithYesOrNo(
                       text: "Do you suffer from high blood pressure or not?",
                       onChanged: (value) {
-                        model = model.copyWith(bloodPressureMedTreatment: value);
+                        isHighBloodP = value;
+                        model =
+                            model.copyWith(bloodPressureMedTreatment: value);
                       },
                     ),
                     SizedBox(
@@ -72,6 +79,7 @@ class TakeATest2Screen extends StatelessWidget {
                     TestWithYesOrNo(
                       text: "Do you suffer from diabetes or not ?",
                       onChanged: (value) {
+                        isDiabetes = value;
                         model = model.copyWith(isDiabetes: value);
                       },
                     ),
@@ -102,15 +110,17 @@ class TakeATest2Screen extends StatelessWidget {
                         onTap: (() {
                           model = model.copyWith(
                             totalCholesterol:
-                            double.tryParse(_cholesterolController.text),
+                                double.tryParse(_cholesterolController.text),
+                            bloodPressureMedTreatment: isHighBloodP,
+                            isDiabetes: isDiabetes,
                           );
 
-                          if (model.isDiabetes == null ||
-                              model.bloodPressureMedTreatment == null ||
-                              model.totalCholesterol == null) {
+                          if (model.totalCholesterol == null ||
+                              model.totalCholesterol == 0) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('That information are required'),
+                                content:
+                                    Text('Total cholesterol level is required'),
                               ),
                             );
                             return;

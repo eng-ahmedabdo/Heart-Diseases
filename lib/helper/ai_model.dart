@@ -14,6 +14,7 @@ class AIModel {
   double? systolicBloodPressure;
   double? diastolicBloodPressure;
   double? glucose;
+  double? hdlCholesterol;
 
   AIModel({
     this.gender,
@@ -27,10 +28,11 @@ class AIModel {
     this.systolicBloodPressure,
     this.diastolicBloodPressure,
     this.glucose,
+    this.hdlCholesterol,
   });
 
   Future<String?> test() async {
-    var uri = Uri.parse('https://go-healty.onrender.com/predictAPI');
+    var uri = Uri.parse('https://healty-heart-risk.onrender.com/predictAPI');
     final body = jsonEncode(toJson());
 
     final response = await http.post(
@@ -42,6 +44,7 @@ class AIModel {
     if (response.statusCode == 200) {
       if (kDebugMode) {
         print('Values sent successfully');
+        print(response.body);
       }
       return response.body;
     } else {
@@ -65,6 +68,7 @@ class AIModel {
     double? systolicBloodPressure,
     double? diastolicBloodPressure,
     double? glucose,
+    double? hdlCholesterol,
   }) {
     return AIModel(
       gender: gender ?? this.gender,
@@ -81,12 +85,14 @@ class AIModel {
           diastolicBloodPressure ?? this.diastolicBloodPressure,
       glucose: glucose ?? this.glucose,
       isSmoking: isSmoking ?? this.isSmoking,
+      hdlCholesterol: hdlCholesterol ?? this.hdlCholesterol,
     );
   }
 
   Map<String, dynamic> toJson() => {
         'gender': gender,
         'age': age,
+        'smoker': isSmoking,
         'cigarettes': cigarettes,
         'is_high_blood_pressure': isHighBloodPressure,
         'is_diabetes': isDiabetes,
@@ -95,5 +101,6 @@ class AIModel {
         'systolic_blood_pressure': systolicBloodPressure,
         'Diastolic_b_p': diastolicBloodPressure,
         'glucose': glucose,
+        'hdl_cholesterol': hdlCholesterol,
       };
 }

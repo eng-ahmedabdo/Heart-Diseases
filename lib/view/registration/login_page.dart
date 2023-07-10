@@ -171,7 +171,9 @@ class LoginPage extends GetWidget<AuthViewModel> {
                                 borderRadius: BorderRadius.circular(10),
                                 color: Color(0xFFFF9F9F),
                               ),
-                              child: controller.isLoading.value ? Center(child: CircularProgressIndicator(),) : Center(
+                              child: controller.isLoading.value ? Center(child: CircularProgressIndicator(
+                                color: whiteColor,
+                              ),) : Center(
                                 child: Text(
                                   'Login',
                                   textAlign: TextAlign.center,
